@@ -1,0 +1,121 @@
+/*
+  Live panels and the terminal, in the site's own light style: white cards, one thin border, the same radius and
+  shadow as every other card, the site's sans for words and its mono for numbers. Black, white and grey only.
+  A side or a direction is never told by colour: a buy is a filled tag and a sell an outlined one, each with an arrow.
+  tm- is the shared kit (status line, panels, rows, price cells), tt- the terminal page.
+*/
+
+/* ---------- panels ---------- */
+.tm-grid { display: grid; gap: 16px; margin: 0; }
+@media (min-width: 900px) { .tm-grid { gap: 20px; } }
+.tm-p { display: flex; flex-direction: column; min-width: 0; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow-1); overflow: hidden; }
+.tm-ph { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; min-height: 48px; padding: 6px 16px; border-bottom: 1px solid var(--line); }
+.tm-ph h3 { display: inline-flex; align-items: center; gap: 9px; font-size: 14.5px; font-weight: 600; letter-spacing: -0.015em; white-space: nowrap; }
+.tm-pm { margin-left: auto; font-size: 13px; color: var(--ink-3); white-space: nowrap; }
+.tm-pm b { font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--ink); letter-spacing: -0.02em; }
+.tm-pf { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 12px 16px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--ink-3); }
+.tm-pf b { font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--ink); }
+.tm-none { flex: 1; display: grid; place-items: center; padding: 36px 20px; font-size: 14px; color: var(--ink-3); text-align: center; }
+.tm-tabs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--soft); }
+.tm-tabs button { padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--ink-3); white-space: nowrap; transition: color 0.2s, background 0.2s; }
+.tm-tabs button:hover { color: var(--ink); }
+.tm-tabs button[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.tm-tabs i { font-style: normal; font-family: var(--mono); font-size: 11.5px; opacity: 0.6; margin-left: 2px; }
+.tm-link { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; }
+.tm-link svg { width: 14px; height: 14px; transition: transform 0.25s var(--ease); }
+.tm-link:hover svg { transform: translateX(3px); }
+
+/* ---------- status line ---------- */
+.tm-bar { display: flex; align-items: stretch; height: 42px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--soft); font-size: 13px; white-space: nowrap; overflow: hidden; }
+.tm-bar > span { display: inline-flex; align-items: center; gap: 8px; padding: 0 16px; border-right: 1px solid var(--line); }
+.tm-bar i { font-style: normal; color: var(--ink-3); }
+.tm-bar b { font-family: var(--mono); font-size: 12.5px; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.tm-bar-live { font-weight: 600; }
+.tm-bar > .tm-bar-clock { margin-left: auto; border-right: 0; border-left: 1px solid var(--line); }
+@media (max-width: 1099px) { .tm-bar > span:nth-child(n + 5):not(.tm-bar-clock) { display: none; } }
+@media (max-width: 719px) { .tm-bar > span:nth-child(n + 3) { display: none; } .tm-bar > span { padding: 0 13px; } .tm-bar > span:nth-child(2) { border-right: 0; margin-left: auto; } }
+
+/* ---------- rows ---------- */
+.tm-list { margin: 0; height: calc(var(--rows) * 38px); overflow: hidden; }
+.tm-r { display: grid; align-items: center; gap: 12px; height: 38px; padding: 0 16px; border-bottom: 1px solid var(--line); font-size: 13.5px; white-space: nowrap; }
+.tm-list .tm-r:last-child { border-bottom-color: transparent; }
+.tm-r:hover { background: var(--soft); }
+.tm-r.pick { cursor: pointer; }
+.tm-r > b { font-weight: 600; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.tm-r.launch { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) 58px 30px; }
+.tm-r.trade { grid-template-columns: 30px 52px minmax(0, 1fr) auto 40px; }
+.tm-r.fire { grid-template-columns: 30px 62px minmax(0, auto) minmax(0, 1fr); }
+.tm-r.req { grid-template-columns: 30px minmax(0, 1fr) auto; }
+.tm-w { display: none; }
+@media (min-width: 720px) {
+  .tm-w { display: inline; }
+  .tm-r.trade.wide { grid-template-columns: 30px 52px minmax(0, 1fr) minmax(64px, auto) auto 40px; }
+}
+.tm-age { font-family: var(--mono); font-size: 12px; color: var(--ink-4); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.tm-r > .tm-age:last-child { text-align: right; }
+.tm-num { font-family: var(--mono); font-size: 12.5px; letter-spacing: -0.02em; text-align: right; font-variant-numeric: tabular-nums; }
+.tm-dim { color: var(--ink-3); }
+.tm-clip { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.tm-right { text-align: right; }
+.tm-venue { font-size: 12px; text-align: right; color: var(--ink-4); }
+/* a buy is filled, a sell is outlined: the shape and the word say which, never a colour */
+.tm-side { justify-self: start; display: inline-flex; align-items: center; gap: 3px; height: 21px; padding: 0 7px 0 5px; border-radius: 6px; font-size: 11.5px; font-weight: 600; }
+.tm-side svg { width: 9px; height: 9px; }
+.tm-side.buy { background: var(--ink); color: var(--bg); }
+.tm-side.sell { color: var(--ink-3); box-shadow: inset 0 0 0 1px var(--line-2); }
+.tm-tag { justify-self: start; display: inline-flex; align-items: center; height: 21px; padding: 0 8px; border-radius: 999px; background: var(--soft-2); font-size: 11.5px; font-weight: 500; color: var(--ink-2); white-space: nowrap; }
+.tm-tag.fill { background: var(--ink); color: var(--bg); }
+.tm-tag.off { background: transparent; color: var(--ink-3); box-shadow: inset 0 0 0 1px var(--line-2); }
+.tm-new { animation: tm-flash 1.2s ease-out; }
+.tm-tick { animation: tm-tick 0.9s ease-out; }
+
+/* ---------- price cells ---------- */
+.tm-cells { display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); overflow: hidden; }
+.tm-cell { display: grid; grid-template-columns: minmax(0, 1fr) auto 28px; align-items: center; gap: 8px; height: 38px; padding: 0 12px 0 16px; box-shadow: 1px 0 0 var(--line), 0 1px 0 var(--line); font-size: 13.5px; white-space: nowrap; transition: background 1.4s ease-out; }
+.tm-cell b { font-weight: 600; letter-spacing: -0.01em; }
+.tm-cell .tm-num { display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; animation: tm-tick 0.9s ease-out; }
+.tm-cell .tm-num svg { width: 8px; height: 8px; color: var(--ink); }
+.tm-cell.dn .tm-num svg { color: var(--ink-4); }
+.tm-cell .tm-age { text-align: right; }
+.tm-cell.hit { background: var(--soft-2); transition-duration: 0.1s; }
+@media (max-width: 719px) { .tm-cells { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tm-cell { padding: 0 10px 0 12px; } }
+
+/* ---------- the terminal page ---------- */
+/* a tool starts near the top: the same head as every page, at a smaller size */
+.pagehead.tt-head { padding: 28px 0 22px; }
+.pagehead.tt-head .h1 { font-size: clamp(30px, 3.6vw, 42px); margin: 10px 0 0; }
+.tt-head-row { display: grid; gap: 6px; }
+.tt-head-row p { color: var(--ink-3); font-size: 16px; max-width: 62ch; }
+@media (min-width: 900px) { .pagehead.tt-head { padding: 36px 0 26px; } .tt-head-row { grid-template-columns: auto minmax(0, 1fr); gap: 32px; align-items: end; } .tt-head-row p { padding-bottom: 6px; } }
+.tt-stack { display: grid; gap: 16px; }
+@media (min-width: 900px) { .tt-stack { gap: 20px; } }
+.tt .tm-cells { max-height: 342px; overflow-y: auto; }
+@media (max-width: 999px) { .tt .tm-list { height: calc(8 * 38px); } }
+@media (min-width: 1000px) {
+  .tt { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .tt > .tt-cmd, .tt > .tm-prices { grid-column: 1 / -1; }
+  .tt > .tt-launches, .tt > .tt-trades, .tt > .tt-signals { grid-column: span 4; }
+  .tt.with-usage > .tt-launches, .tt.with-usage > .tt-trades, .tt.with-usage > .tt-signals, .tt.with-usage > .tt-reqs { grid-column: span 3; }
+  .tt .tm-cells { max-height: none; }
+}
+.tt-form { display: flex; align-items: center; gap: 10px; padding: 10px 10px 10px 12px; }
+.tt-form > span { display: grid; place-items: center; width: 34px; height: 34px; flex: none; border-radius: 50%; background: var(--soft); font-family: var(--mono); color: var(--ink-3); }
+.tt-form input { flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; font-family: var(--mono); font-size: 14px; letter-spacing: -0.02em; }
+.tt-form input::placeholder { color: var(--ink-4); }
+.tt-form input:focus { outline: none; }
+.tt-try { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 0 16px 14px; font-size: 13px; color: var(--ink-3); }
+.tt-try > span { margin-right: 4px; }
+.tt-try button { font-family: var(--mono); font-size: 12px; letter-spacing: -0.02em; }
+.tt-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 10px 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); }
+.tt-meta b { color: var(--ink); font-weight: 600; }
+.tt-meta code { font-size: 12.5px; }
+.tt-ans { border-top: 1px solid var(--line); }
+.tt-ans .av { border: 0; border-radius: 0; box-shadow: none; }
+
+/* ---------- motion ---------- */
+@keyframes tm-flash { from { background: var(--soft); } to { background: transparent; } }
+@keyframes tm-tick { from { color: var(--ink-4); } }
+@media (prefers-reduced-motion: reduce) {
+  .tm-new, .tm-tick, .tm-cell .tm-num { animation: none !important; }
+  .tm-cell { transition: none; }
+}

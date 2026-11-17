@@ -1,0 +1,43 @@
+{
+  "name": "@specula/mcp",
+  "version": "0.1.0",
+  "description": "Specula as an MCP server: one tool per data feed, priced, paid per request from the agent's own wallet.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsx --test --test-concurrency=1 test/*.test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "@specula/sdk": "^0.1.0",
+    "viem": "2.57.18"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "4.23.15",
+    "typescript": "^5.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpeculaAgents/specula.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://speculaagents.fun/docs",
+  "bin": {
+    "specula-mcp": "./dist/index.js"
+  }
+}

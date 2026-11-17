@@ -1,0 +1,12 @@
+{
+  "name": "specula",
+  "private": true,
+  "description": "Specula: the data terminal for AI agents. See README.md.",
+  "scripts": {
+    "preview": "./dev.sh",
+    "preview:pay": "./dev.sh --pay",
+    "install:all": "npm --prefix engine install && npm --prefix packages install && npm --prefix web install",
+    "test": "(cd contracts && forge test) && npm --prefix engine test && npm --prefix packages test && npm --prefix web test",
+    "shots": "npm --prefix web run shots"
+  }
+}
