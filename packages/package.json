@@ -1,0 +1,19 @@
+{
+  "name": "specula-packages",
+  "private": true,
+  "description": "What agents install: the SDK, the MCP server and the framework tools. One install for all of them.",
+  "workspaces": [
+    "sdk",
+    "mcp",
+    "ai-sdk",
+    "langchain",
+    "plugin-eliza",
+    "recipes"
+  ],
+  "scripts": {
+    "test": "npm test --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "build": "npm run build --workspaces"
+  },
+  "type": "module"
+}
