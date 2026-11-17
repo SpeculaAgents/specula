@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };
 
-const THEME = `(function(){var t=null;try{t=localStorage.getItem("specula-theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t})()`;
+const THEME = `(function(){var t=null;try{t=localStorage.getItem("specula-theme")}catch(e){}if(t!=="dark"){t="light"}document.documentElement.dataset.theme=t})()`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
