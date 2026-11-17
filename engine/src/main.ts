@@ -65,7 +65,7 @@ export async function startEngine(overrides: Partial<Config> = {}, opts: CtxOpti
   if (!budgetHooks.includes(checkTeamBudget)) budgetHooks.push(checkTeamBudget);
   const app = makeApp(ctx, [registerSignals, registerVerify, registerQuality, registerIndexes, registerMarket, registerArchive, registerLab, registerTeams]);
   const server = await new Promise<Server>((res) => {
-    const s = nodeServe({ fetch: app.fetch, port: cfg.port, hostname: "0.0.0.0" }, () => res(s as unknown as Server));
+    const s = nodeServe({ fetch: app.fetch, port: cfg.port, hostname: process.env.SPECULA_HOST ?? "::" }, () => res(s as unknown as Server));
   });
   const streams = attachStreams(ctx, server);
   const port = (server.address() as { port: number }).port;
