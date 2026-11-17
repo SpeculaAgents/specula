@@ -1,6 +1,8 @@
 # Build from the repository root:  docker build -f engine/Dockerfile .
 FROM node:22-slim
 WORKDIR /app
+# better-sqlite3 builds from source when no prebuilt binary matches this Node version
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && rm -rf /var/lib/apt/lists/*
 COPY engine/package.json engine/package-lock.json ./engine/
 RUN cd engine && npm ci --no-audit --no-fund
 COPY engine ./engine
