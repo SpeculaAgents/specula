@@ -15,10 +15,14 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };
 
+const THEME = `(function(){var t=null;try{t=localStorage.getItem("specula-theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t})()`;
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* The theme is set before the first paint: the visitor's saved choice, or else what their system prefers. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME }} />
         <link rel="preload" href="/fonts/sans.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/mono.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>

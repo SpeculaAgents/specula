@@ -86,6 +86,22 @@ for (const [path, needles] of Object.entries(PAGES))
     assert.match(html, /<title>[^<]{5,80}<\/title>/);
   });
 
+test("every page has the theme switch, sets the theme before paint, and ships both themes", async () => {
+  for (const path of ["/", "/feeds", "/terminal", "/docs", "/nope"]) {
+    const { html } = await page(path);
+    assert.ok(html.includes('aria-label="Switch between light and dark"'), `${path} has no theme switch`);
+    assert.ok(html.includes('localStorage.getItem(\\"specula-theme\\")') || html.includes('localStorage.getItem("specula-theme")'), `${path} does not set the theme before paint`);
+    assert.ok(html.indexOf("specula-theme") < html.indexOf("<body"), `${path} sets the theme too late`);
+  }
+  const { html } = await page("/");
+  const sheets = [...html.matchAll(/href="([^"]+\.css[^"]*)"/g)].map((m) => m[1]);
+  assert.ok(sheets.length > 0);
+  const css = (await Promise.all(sheets.map(async (h) => (await fetch(site + h)).text()))).join("\n");
+  assert.match(css, /\[data-theme=["']?dark["']?\]/, "the dark theme is in the stylesheet");
+  assert.match(css, /--page:\s*#fff/i, "the light theme is in the stylesheet");
+  assert.match(css, /--page:\s*#0a0a0a/i, "the dark page colour is in the stylesheet");
+});
+
 test("the token page never names a tax, a split or the chain", async () => {
   const text = (await page("/token")).html.replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<[^>]+>/g, " ");
   for (const bad of [/\btax\b/i, /\d+\s?%/, /robinhood/i, /\bsplit\b/i, /memecoin/i]) assert.ok(!bad.test(text.split("Specula is software")[0].split("Own risk").slice(1).join(" ")), `the token page says ${bad}`);

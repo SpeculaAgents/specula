@@ -9,7 +9,7 @@
 .hm-band { padding: 76px 0; }
 .hm-band.hm-first { padding-top: 64px; }
 @media (min-width: 900px) { .hm-band { padding: 108px 0; } .hm-band.hm-first { padding-top: 96px; } }
-.hm-grid { position: absolute; inset: 0 0 auto; height: 860px; pointer-events: none; background-image: linear-gradient(to right, rgba(11, 11, 11, 0.055) 1px, transparent 1px), linear-gradient(to bottom, rgba(11, 11, 11, 0.055) 1px, transparent 1px); background-size: 56px 56px; background-position: center top; -webkit-mask-image: radial-gradient(ellipse 75% 80% at 62% 18%, #000000 12%, transparent 72%); mask-image: radial-gradient(ellipse 75% 80% at 62% 18%, #000000 12%, transparent 72%); }
+.hm-grid { position: absolute; inset: 0 0 auto; height: 860px; pointer-events: none; background-image: linear-gradient(to right, rgba(var(--shade), 0.055) 1px, transparent 1px), linear-gradient(to bottom, rgba(var(--shade), 0.055) 1px, transparent 1px); background-size: 56px 56px; background-position: center top; -webkit-mask-image: radial-gradient(ellipse 75% 80% at 62% 18%, #000000 12%, transparent 72%); mask-image: radial-gradient(ellipse 75% 80% at 62% 18%, #000000 12%, transparent 72%); }
 .hm-hero .frame { position: relative; }
 .hm-hero-in { display: grid; gap: 44px; padding: 28px 0 40px; }
 .hm-copy { display: grid; gap: 22px; justify-items: start; min-width: 0; }
@@ -39,7 +39,7 @@
 
 /* ---------- the exchange: one request, one signed answer ---------- */
 .hm-x-wrap { position: relative; min-width: 0; animation: rise 1s var(--ease) 0.18s both; }
-.hm-x { position: relative; background: var(--night); color: var(--night-ink); border-radius: 20px; overflow: hidden; font-family: var(--mono); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 1px 2px rgba(11, 11, 11, 0.3), 0 28px 56px -24px rgba(11, 11, 11, 0.45), 0 64px 120px -48px rgba(11, 11, 11, 0.5); }
+.hm-x { position: relative; background: var(--night); color: var(--night-ink); border-radius: 20px; overflow: hidden; font-family: var(--mono); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 1px 2px rgba(var(--shade), 0.3), 0 28px 56px -24px rgba(var(--shade), 0.45), 0 64px 120px -48px rgba(var(--shade), 0.5); }
 .hm-x::before { content: ""; position: absolute; inset: 0 0 auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent); }
 .hm-x-bar { display: flex; align-items: center; gap: 2px; padding: 8px; border-bottom: 1px solid var(--night-line); }
 .hm-x-bar button { position: relative; padding: 8px 13px; border-radius: 9px; font-family: var(--sans); font-size: 13.5px; font-weight: 500; color: var(--night-ink-2); white-space: nowrap; transition: color 0.2s, background 0.2s; }
@@ -132,31 +132,38 @@
    Sections sit on it with spacing only. It ends in the footer's own grey, so the footer grows out of it. The shapes
    drift slowly and move a little against the page as you scroll; with reduced motion everything stands still.
    Black, white and grey only. */
+/* the tones of the backdrop: almost white in the light theme, almost black in the dark one */
+.hm-page { --sk-a: #ffffff; --sk-b: #f7f7f7; --sk-c: #fafafa; --sk-d: #f8f8f8; --sk-e: #fdfdfd; }
+:root[data-theme="dark"] .hm-page { --sk-a: #0a0a0a; --sk-b: #111111; --sk-c: #0d0d0d; --sk-d: #101010; --sk-e: #0b0b0b; }
+/* on near-black the grain is light and laid over, not dark and multiplied; the dots and the grid are fainter */
+:root[data-theme="dark"] .hm-sky-grain { filter: invert(1); mix-blend-mode: screen; opacity: 0.22; }
+:root[data-theme="dark"] .hm-sky-dots, :root[data-theme="dark"] .hm-sky-lines, :root[data-theme="dark"] .hm-grid { opacity: 0.6; }
+:root[data-theme="dark"] .hm-sky-shapes i { opacity: 0.75; }
 .hm-page { position: relative; isolation: isolate; overflow: hidden; margin-bottom: -40px; padding-bottom: 40px; }
 .hm-page > section { position: relative; z-index: 1; background: none; border: 0; }
 .hm-sky { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
   background:
-    radial-gradient(ellipse 46% 8% at 82% 7.5%, rgba(11, 11, 11, 0.075), rgba(11, 11, 11, 0)),
-    radial-gradient(ellipse 40% 8% at 6% 11%, rgba(11, 11, 11, 0.05), rgba(11, 11, 11, 0)),
-    radial-gradient(ellipse 52% 8% at 46% 7%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0)),
-    radial-gradient(ellipse 50% 10% at 96% 31%, rgba(11, 11, 11, 0.06), rgba(11, 11, 11, 0)),
-    radial-gradient(ellipse 44% 9% at 2% 47%, rgba(11, 11, 11, 0.065), rgba(11, 11, 11, 0)),
-    radial-gradient(ellipse 48% 9% at 70% 56%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)),
-    radial-gradient(ellipse 46% 9% at 90% 74%, rgba(11, 11, 11, 0.055), rgba(11, 11, 11, 0)),
-    radial-gradient(ellipse 50% 9% at 12% 88%, rgba(11, 11, 11, 0.05), rgba(11, 11, 11, 0)),
-    linear-gradient(180deg, #ffffff 0%, #f7f7f7 3.5%, #fafafa 8%, #ffffff 15%, #ffffff 26%, #fcfcfc 38%, #f8f8f8 48%, #fdfdfd 60%, #ffffff 70%, #fbfbfb 82%, #f8f8f8 93%, #f6f6f6 100%);
+    radial-gradient(ellipse 46% 8% at 82% 7.5%, rgba(var(--shade), 0.075), rgba(var(--shade), 0)),
+    radial-gradient(ellipse 40% 8% at 6% 11%, rgba(var(--shade), 0.05), rgba(var(--shade), 0)),
+    radial-gradient(ellipse 52% 8% at 46% 7%, rgba(var(--deep), 0.95), rgba(var(--deep), 0)),
+    radial-gradient(ellipse 50% 10% at 96% 31%, rgba(var(--shade), 0.06), rgba(var(--shade), 0)),
+    radial-gradient(ellipse 44% 9% at 2% 47%, rgba(var(--shade), 0.065), rgba(var(--shade), 0)),
+    radial-gradient(ellipse 48% 9% at 70% 56%, rgba(var(--deep), 0.9), rgba(var(--deep), 0)),
+    radial-gradient(ellipse 46% 9% at 90% 74%, rgba(var(--shade), 0.055), rgba(var(--shade), 0)),
+    radial-gradient(ellipse 50% 9% at 12% 88%, rgba(var(--shade), 0.05), rgba(var(--shade), 0)),
+    linear-gradient(180deg, var(--sk-a) 0%, var(--sk-b) 3.5%, var(--sk-c) 8%, var(--sk-a) 15%, var(--sk-a) 26%, var(--sk-e) 38%, var(--sk-d) 48%, var(--sk-e) 60%, var(--sk-a) 70%, var(--sk-c) 82%, var(--sk-d) 93%, var(--soft) 100%);
 }
 .hm-sky > span { position: absolute; inset: 0; display: block; }
-.hm-sky-dots { background-image: radial-gradient(rgba(11, 11, 11, 0.17) 1px, transparent 1.5px); background-size: 22px 22px; -webkit-mask-image: linear-gradient(180deg, transparent 12%, #000000 22%, #000000 27%, transparent 38%, transparent 66%, #000000 76%, transparent 88%), linear-gradient(100deg, transparent 30%, #000000 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(180deg, transparent 12%, #000000 22%, #000000 27%, transparent 38%, transparent 66%, #000000 76%, transparent 88%), linear-gradient(100deg, transparent 30%, #000000 100%); mask-composite: intersect; }
-.hm-sky-lines { background-image: linear-gradient(to right, rgba(11, 11, 11, 0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(11, 11, 11, 0.06) 1px, transparent 1px); background-size: 56px 56px; background-position: center top; -webkit-mask-image: linear-gradient(180deg, transparent 36%, #000000 46%, transparent 58%, transparent 86%, #000000 96%, transparent 100%), linear-gradient(260deg, transparent 25%, #000000 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(180deg, transparent 36%, #000000 46%, transparent 58%, transparent 86%, #000000 96%, transparent 100%), linear-gradient(260deg, transparent 25%, #000000 100%); mask-composite: intersect; }
+.hm-sky-dots { background-image: radial-gradient(rgba(var(--shade), 0.17) 1px, transparent 1.5px); background-size: 22px 22px; -webkit-mask-image: linear-gradient(180deg, transparent 12%, #000000 22%, #000000 27%, transparent 38%, transparent 66%, #000000 76%, transparent 88%), linear-gradient(100deg, transparent 30%, #000000 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(180deg, transparent 12%, #000000 22%, #000000 27%, transparent 38%, transparent 66%, #000000 76%, transparent 88%), linear-gradient(100deg, transparent 30%, #000000 100%); mask-composite: intersect; }
+.hm-sky-lines { background-image: linear-gradient(to right, rgba(var(--shade), 0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(var(--shade), 0.06) 1px, transparent 1px); background-size: 56px 56px; background-position: center top; -webkit-mask-image: linear-gradient(180deg, transparent 36%, #000000 46%, transparent 58%, transparent 86%, #000000 96%, transparent 100%), linear-gradient(260deg, transparent 25%, #000000 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(180deg, transparent 36%, #000000 46%, transparent 58%, transparent 86%, #000000 96%, transparent 100%), linear-gradient(260deg, transparent 25%, #000000 100%); mask-composite: intersect; }
 .hm-sky-grain { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000000 220px); mask-image: linear-gradient(180deg, transparent 0, #000000 220px); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.32; mix-blend-mode: multiply; }
 .hm-sky-shapes i { position: absolute; display: block; border-radius: 42% 58% 55% 45% / 52% 44% 56% 48%; filter: blur(80px); will-change: transform; }
-.hm-sky-shapes i:nth-child(1) { width: 640px; height: 420px; right: -140px; top: 150px; background: rgba(11, 11, 11, 0.09); animation: hm-drift-a 34s ease-in-out infinite alternate; }
-.hm-sky-shapes i:nth-child(2) { width: 560px; height: 360px; left: 30%; top: 190px; background: rgba(255, 255, 255, 0.95); animation: hm-drift-c 29s ease-in-out infinite alternate; }
-.hm-sky-shapes i:nth-child(3) { width: 520px; height: 420px; left: -180px; top: 24%; background: rgba(11, 11, 11, 0.06); animation: hm-drift-b 41s ease-in-out infinite alternate; }
-.hm-sky-shapes i:nth-child(4) { width: 600px; height: 460px; right: -200px; top: 46%; background: rgba(11, 11, 11, 0.065); animation: hm-drift-a 38s ease-in-out infinite alternate; }
-.hm-sky-shapes i:nth-child(5) { width: 560px; height: 400px; left: -160px; top: 68%; background: rgba(11, 11, 11, 0.055); animation: hm-drift-b 44s ease-in-out infinite alternate; }
-.hm-sky-shapes i:nth-child(6) { width: 620px; height: 380px; left: 28%; top: 88%; background: rgba(255, 255, 255, 0.9); animation: hm-drift-c 33s ease-in-out infinite alternate; }
+.hm-sky-shapes i:nth-child(1) { width: 640px; height: 420px; right: -140px; top: 150px; background: rgba(var(--shade), 0.09); animation: hm-drift-a 34s ease-in-out infinite alternate; }
+.hm-sky-shapes i:nth-child(2) { width: 560px; height: 360px; left: 30%; top: 190px; background: rgba(var(--deep), 0.95); animation: hm-drift-c 29s ease-in-out infinite alternate; }
+.hm-sky-shapes i:nth-child(3) { width: 520px; height: 420px; left: -180px; top: 24%; background: rgba(var(--shade), 0.06); animation: hm-drift-b 41s ease-in-out infinite alternate; }
+.hm-sky-shapes i:nth-child(4) { width: 600px; height: 460px; right: -200px; top: 46%; background: rgba(var(--shade), 0.065); animation: hm-drift-a 38s ease-in-out infinite alternate; }
+.hm-sky-shapes i:nth-child(5) { width: 560px; height: 400px; left: -160px; top: 68%; background: rgba(var(--shade), 0.055); animation: hm-drift-b 44s ease-in-out infinite alternate; }
+.hm-sky-shapes i:nth-child(6) { width: 620px; height: 380px; left: 28%; top: 88%; background: rgba(var(--deep), 0.9); animation: hm-drift-c 33s ease-in-out infinite alternate; }
 @media (max-width: 899px) { .hm-sky-shapes i { filter: blur(60px); width: 340px !important; height: 300px !important; } }
 /* the shapes travel a little slower than the page, so the backdrop shifts as you scroll */
 @supports (animation-timeline: scroll()) {
@@ -172,7 +179,7 @@
 
 /* ---------- everything on the page is light ---------- */
 /* the request and its signed answer: a white console with dark type */
-.hm-x { background: rgba(255, 255, 255, 0.92); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-3); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.hm-x { background: color-mix(in srgb, var(--bg) 92%, transparent); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-3); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .hm-x::before { display: none; }
 .hm-x-bar { border-bottom-color: var(--line); }
 .hm-x-bar button { color: var(--ink-3); }
@@ -193,10 +200,10 @@
 .hm-x-empty .hm-x-body { color: var(--ink-3); }
 .hm-x-empty b { color: var(--ink); }
 /* for developers: a light card and a light code box */
-.hm-dev { position: relative; padding: 36px 22px; border-radius: var(--r-lg); background: rgba(255, 255, 255, 0.72); border: 1px solid var(--line); box-shadow: var(--shadow-2); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.hm-dev { position: relative; padding: 36px 22px; border-radius: var(--r-lg); background: color-mix(in srgb, var(--bg) 72%, transparent); border: 1px solid var(--line); box-shadow: var(--shadow-2); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 @media (min-width: 900px) { .hm-dev { padding: 72px 64px; border-radius: 36px; } }
 .hm-dev .chip { background: var(--soft-2); }
-.hm-dev .codebox { background: #ffffff; box-shadow: inset 0 0 0 1px var(--line), var(--shadow-2); }
+.hm-dev .codebox { background: var(--bg); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-2); }
 .hm-dev .tabs button { color: var(--ink-3); }
 .hm-dev .tabs button:hover { color: var(--ink); }
 .hm-dev .tabs button[aria-selected="true"] { background: var(--soft-2); color: var(--ink); }

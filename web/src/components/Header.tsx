@@ -3,8 +3,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { NAV, SITE } from "@/lib/site";
-import { Close, GitHub, Menu, XLogo } from "./Icons";
+import { Close, GitHub, Menu, Moon, Sun, XLogo } from "./Icons";
 import { Logo } from "./Logo";
+
+/** Switch between the light and the dark theme, and remember the choice in this browser. */
+function switchTheme() {
+  const root = document.documentElement;
+  const next = root.dataset.theme === "dark" ? "light" : "dark";
+  root.dataset.theme = next;
+  try {
+    localStorage.setItem("specula-theme", next);
+  } catch {
+    /* storage is blocked: the choice lasts for this page */
+  }
+}
 
 export function Header() {
   const path = usePathname();
@@ -49,6 +61,10 @@ export function Header() {
             <a className="icon-btn" href={SITE.x} target="_blank" rel="noreferrer" aria-label="Specula on X">
               <XLogo />
             </a>
+            <button className="icon-btn theme-btn" onClick={switchTheme} aria-label="Switch between light and dark" title="Light or dark">
+              <span className="moon"><Moon /></span>
+              <span className="sun"><Sun /></span>
+            </button>
             <button className="icon-btn menu-btn" onClick={() => setOpen(shown ? null : path)} aria-label={shown ? "Close menu" : "Open menu"} aria-expanded={shown}>
               {shown ? <Close /> : <Menu />}
             </button>
