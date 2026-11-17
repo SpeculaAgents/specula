@@ -20,7 +20,7 @@ import { crossCheckPrices, registerQuality } from "./quality.ts";
 import { exampleOf, makeApp } from "./server.ts";
 import { pollSignals, registerSignals, seedSignals, settleOutcomes, watchSignals } from "./signals.ts";
 import { attachStreams } from "./streams.ts";
-import { indexTick, prune } from "./chain/indexer.ts";
+import { indexBackTick, indexTick, prune } from "./chain/indexer.ts";
 import { rememberPrices, type PricePoint } from "./chain/prices.ts";
 import { nowSec, ZERO } from "./util.ts";
 
@@ -110,10 +110,13 @@ export async function startEngine(overrides: Partial<Config> = {}, opts: CtxOpti
   if (cfg.indexer)
     every("index", cfg.indexIntervalMs, async () => {
       // Catch up in a few chunks per tick, then idle until the next one.
+      let inStep = false;
       for (let i = 0; i < 4; i++) {
         const r = await indexTick(ctx);
-        if (!r || r.behind === 0n) break;
+        if (!r || r.behind === 0n) { inStep = true; break; }
       }
+      // in step with the head: read one chunk of older history, if the window asks for more than is indexed
+      if (inStep) await indexBackTick(ctx);
       if (kvGet(ctx.db, "example_token") === null || nowSec() % 600 < 10) pickExamples(ctx);
     }, 500);
   every("signals-chain", 30_000, () => pollSignals(ctx, "chain"), 20_000);

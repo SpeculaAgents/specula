@@ -329,6 +329,27 @@ export async function indexTick(ctx: Ctx): Promise<{ from: bigint; to: bigint; h
   return { from, to, head, behind: head - to };
 }
 
+/**
+ * Read older history one chunk at a time, down to SPECULA_BACKFILL_BLOCKS behind the head as it was when the index
+ * started. The first run reads that far at once; an engine that started with a shorter window catches up with this,
+ * from the newest of the missing blocks to the oldest, only once the index is in step with the head.
+ */
+export async function indexBackTick(ctx: Ctx): Promise<{ from: bigint; to: bigint; left: bigint } | null> {
+  const startV = kvGet(ctx.db, "index_start");
+  const headV = kvGet(ctx.db, "index_head");
+  if (!startV || !headV) return null;
+  const start = BigInt(startV);
+  const anchor = BigInt(kvGet(ctx.db, "index_anchor") ?? headV);
+  if (!kvGet(ctx.db, "index_anchor")) kvSet(ctx.db, "index_anchor", anchor.toString());
+  const target = anchor > BigInt(ctx.cfg.backfillBlocks) ? anchor - BigInt(ctx.cfg.backfillBlocks) : 0n;
+  if (start <= target) return null;
+  const to = start - 1n;
+  const from = to - CHUNK + 1n < target ? target : to - CHUNK + 1n;
+  await indexRange(ctx, from, to);
+  kvSet(ctx.db, "index_start", from.toString());
+  return { from, to, left: from - target };
+}
+
 export function prune(ctx: Ctx) {
   const t = nowSec();
   ctx.db.prepare("DELETE FROM liquidity WHERE time < ?").run(t - 7 * 86400);

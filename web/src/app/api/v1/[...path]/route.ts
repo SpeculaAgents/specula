@@ -6,10 +6,16 @@ const ENGINE = (process.env.SPECULA_ENGINE_URL ?? "http://127.0.0.1:4100").repla
 /** What the public site may reach on the engine. Anything else, the metrics among it, is not forwarded. */
 const ALLOW = /^(site|catalog(\/[a-z0-9.]+)?|feeds\/[a-z0-9.]+|status|requests|quote\/[a-z0-9.]+|events|signals(\/(parse|mine|rule_[A-Za-z0-9_-]+))?|quality|roots|proof\/0x[0-9a-fA-F]{64}|indexes|oracle\/[a-z]+:[A-Za-z0-9.]+|account|budget|receipts(\/rcpt_[A-Za-z0-9_-]+)?|credits\/topup|token|briefing|market(\/(mine|feeds(\/[a-z0-9]+)?))?|bounties(\/bnty_[A-Za-z0-9_-]+(\/offers)?)?|archive|lab(\/paper(\/paper_[A-Za-z0-9_-]+)?)?|teams(\/(mine|team_[A-Za-z0-9_-]+\/(members(\/0x[0-9a-fA-F]{40})?|budget)))?|demand)$/;
 
+/** Until launch (SPECULA_OPEN=off) only the site itself reads the engine; agents and scripts get a clear answer. */
+const OPEN = process.env.SPECULA_OPEN !== "off";
+const ALWAYS = /^(site|catalog(\/[a-z0-9.]+)?|status|token)$/;
+
 async function forward(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
   const { path } = await ctx.params;
   const joined = path.join("/");
   if (!ALLOW.test(joined)) return Response.json({ error: "not_found", message: "No such route." }, { status: 404 });
+  if (!OPEN && !ALWAYS.test(joined) && req.headers.get("sec-fetch-site") !== "same-origin")
+    return Response.json({ error: "not_open", message: "Specula opens to agents with the $SPECULA launch. Follow @SpeculaAgents." }, { status: 503 });
   const headers = new Headers();
   for (const h of ["authorization", "x-payment", "content-type", "x-specula-client"]) {
     const v = req.headers.get(h);
