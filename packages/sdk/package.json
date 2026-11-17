@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "tsx --test --test-concurrency=1 test/*.test.ts"
   },
-  "dependencies": { "viem": "2.57.18" },
+  "dependencies": { "viem": "2.57.19" },
   "devDependencies": { "@types/node": "^24.0.0", "tsx": "4.23.15", "typescript": "^5.9.0" },
   "repository": { "type": "git", "url": "git+https://github.com/SpeculaAgents/specula.git", "directory": "packages/sdk" },
   "homepage": "https://speculaagents.fun/docs"

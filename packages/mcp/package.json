@@ -24,7 +24,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "@specula/sdk": "^0.1.0",
-    "viem": "2.57.18"
+    "viem": "2.57.19"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
