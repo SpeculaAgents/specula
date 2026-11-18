@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildBriefing } from "./ask.ts";
+import { buybackConfig, buybackRun, initBuyback } from "./buyback.ts";
 import { FEEDS, feedById } from "./catalog.ts";
 import { collect, normalizeParams } from "./collect.ts";
 import { loadConfig, type Config } from "./config.ts";
@@ -124,6 +125,9 @@ export async function startEngine(overrides: Partial<Config> = {}, opts: CtxOpti
   every("outcomes", 60_000, async () => settleOutcomes(ctx), 30_000);
   every("indexes", 300_000, () => stepIndexes(ctx), 8_000);
   every("roots", 300_000, () => sealHours(ctx), 12_000);
+  const bb = buybackConfig(opts.env ?? process.env);
+  initBuyback(ctx, bb);
+  if (bb.on) every("buyback", bb.everyMs, async () => { const note = await buybackRun(ctx, bb); console.log(`[buyback] ${note}`); }, 60_000);
   every("quality", 3_600_000, () => crossCheckPrices(ctx), 15_000);
   every("briefing", 1_800_000, () => buildBriefing(ctx), 240_000);
   every("prune", 6 * 3_600_000, async () => (prune(ctx), pruneArchive(ctx)), 60_000);

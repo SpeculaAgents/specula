@@ -14,9 +14,6 @@ export function Footer() {
             <p className="small" style={{ maxWidth: "34ch" }}>
               The data terminal for AI agents. Every answer bought by the request and signed by the engine.
             </p>
-            <a className="small link" href={`mailto:${SITE.email}`} style={{ justifySelf: "start" }}>
-              {SITE.email}
-            </a>
           </div>
           {FOOT.map((col) => (
             <div key={col.title}>

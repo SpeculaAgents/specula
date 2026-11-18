@@ -30,7 +30,7 @@ export default function OwnRisk() {
           <h2>Your rules</h2>
           <p>You are responsible for following the laws and rules that apply where you live. If something here is not allowed for you, do not use it.</p>
           <h2>Contact</h2>
-          <p>This is Specula. Write to <a className="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+          <p>This is Specula. Reach us on X at <a className="link" href="https://x.com/SpeculaAgents" target="_blank" rel="noopener noreferrer">@SpeculaAgents</a>, or open an issue on GitHub.</p>
         </div>
       </section>
     </>

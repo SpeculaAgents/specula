@@ -25,7 +25,8 @@ export const getQuality = cache(() => read<Quality>("/v1/quality"));
 export const getSignals = cache(() => read<Signals>("/v1/signals"));
 export const getRoots = cache(() => read<Roots>("/v1/roots"));
 export const getIndexes = cache(() => read<Indexes>("/v1/indexes"));
-export const getToken = cache(() => read<{ live: boolean; burns: { amount: string; tx: string; time: string }[]; totalBurned: string | null }>("/v1/token"));
+export interface Buyback { on: boolean; wallet: string | null; splitter: string | null; everyMin: number; lastAt: string | null; nextAt: string | null; runs: number; ethSpent: string; burned: string; recent: { time: string; eth: string; burned: string; buyTx: string; burnTx: string | null; via: string }[] }
+export const getToken = cache(() => read<{ live: boolean; burns: { amount: string; tx: string; time: string }[]; totalBurned: string | null; buyback?: Buyback }>("/v1/token"));
 export const getBriefing = cache(() => read<{ day: string | null; at: string | null; sections: { title: string; lines: { text: string; feed: string }[] }[] }>("/v1/briefing"));
 export interface MarketFeed { rank: number; id: string; title: string; summary: string; price: string; seller: string; paid30d: string; paidCalls30d: number; buyers30d: number; uptime24h: number | null }
 export const getMarket = cache(() => read<{ count: number; sellers: number; privateFeeds: number; feeds: MarketFeed[] }>("/v1/market"));

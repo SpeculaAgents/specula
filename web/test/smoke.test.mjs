@@ -66,7 +66,7 @@ const PAGES = {
   "/market": ["Sell data to agents", "List a feed in one call", "No seller has listed a feed yet", "Bounties: data that does not exist yet"],
   "/lab": ["Test before it trades", "Build a strategy", "Archive and replay", "What the archive holds", "macro.snapshot"],
   "/demand": ["What agents ask for", "The ranking opens at 1,000 paid answers"],
-  "/own-risk": ["Use at your own risk", "Not advice", "hello@speculaagents.fun"],
+  "/own-risk": ["Use at your own risk", "Not advice", "@SpeculaAgents"],
 };
 
 for (const [path, needles] of Object.entries(PAGES))

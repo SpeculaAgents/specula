@@ -410,3 +410,30 @@ a.cite:hover { background: var(--ink); color: var(--bg); }
 :root[data-theme="dark"] .theme-btn .sun { display: block; }
 :root[data-theme="dark"] .theme-btn .moon { display: none; }
 
+
+/* token: the buyback clock, the steps and the links */
+.bb-top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+.bb-clock { display: flex; flex-direction: column; justify-content: space-between; gap: 18px; padding: 28px 28px 26px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg); box-shadow: var(--shadow-2); min-width: 0; }
+.bb-clock-head { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--ink-2); }
+.bb-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line-2); }
+.bb-dot[data-on="1"] { background: var(--ink); animation: bb-pulse 2s var(--ease) infinite; }
+.bb-dot[data-on="2"] { background: var(--ink); animation: bb-pulse 0.7s var(--ease) infinite; }
+@keyframes bb-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+.bb-time { font-size: clamp(64px, 11vw, 132px); font-weight: 500; line-height: 0.9; letter-spacing: -0.06em; color: var(--ink); }
+.bb-colon { opacity: 0.35; margin: 0 0.02em; }
+.bb-bar { height: 4px; border-radius: 999px; background: var(--soft); overflow: hidden; }
+.bb-bar i { display: block; height: 100%; background: var(--ink); transform-origin: left; transition: transform 1s linear; }
+.bb-note { margin: 0; font-size: 14px; color: var(--ink-3); }
+.bb-kv { grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: stretch; }
+.bb-kv .bb-small { font-size: clamp(16px, 2vw, 20px); white-space: normal; }
+.bb-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.bb-steps li { padding: 24px 24px 26px; border-radius: var(--r); background: var(--soft); }
+.bb-steps .num { font-size: 13px; color: var(--ink-4); }
+.bb-steps b { display: block; margin-top: 14px; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.bb-steps p { margin: 8px 0 0; font-size: 15px; color: var(--ink-3); line-height: 1.5; }
+.bb-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; margin-top: 22px; }
+@media (max-width: 860px) {
+  .bb-top { grid-template-columns: 1fr; }
+  .bb-steps { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) { .bb-kv dd { font-size: 20px; } .bb-kv dd small { display: block; margin: 4px 0 0; } }

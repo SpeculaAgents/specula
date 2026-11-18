@@ -8,6 +8,7 @@ import { FEEDS, feedById, GROUPS } from "./catalog.ts";
 import { collect, feedUptime, health, peek, type Feed } from "./collect.ts";
 import { USDG_DECIMALS, VERSION } from "./config.ts";
 import { count, type Ctx } from "./ctx.ts";
+import { buybackRuns, buybackState, buybackTotals } from "./buyback.ts";
 import { kvGet } from "./db.ts";
 import { addCredit, checkSettleGas, ipKey, LEVELS, network, paymentRequired, readPayment, requirements, settlePayment, shapeReceipt, TIERS, verifyPayment, walletAccount, whoIs, writeReceipt, quote } from "./pay.ts";
 import { privateFeedIds, serve, shapeRequest, type RequestRow } from "./serve.ts";
@@ -359,14 +360,26 @@ export function makeApp(ctx: Ctx, registrars: Registrar[] = []) {
     return c.json(row ? JSON.parse(row.body) : { day: null, at: null, sections: [] });
   });
 
+  /** The buyback wallet's runs, its next run for the countdown, and the totals. */
+  const buybackView = (ctx: Ctx) => {
+    const st = buybackState(ctx);
+    const tot = buybackTotals(ctx);
+    return {
+      on: st.on, wallet: st.wallet, splitter: st.splitter, everyMin: st.everyMin,
+      lastAt: st.lastAt ? new Date(st.lastAt).toISOString() : null, nextAt: st.nextAt ? new Date(st.nextAt).toISOString() : null,
+      runs: tot.runs, ethSpent: formatUnits(tot.ethIn, 18), burned: formatUnits(tot.burned, 18),
+      recent: buybackRuns(ctx, 50).map((r) => ({ time: iso(r.at), eth: formatUnits(BigInt(r.eth_in), 18), burned: formatUnits(BigInt(r.bought), 18), buyTx: r.buy_tx, burnTx: r.burn_tx, via: r.via })),
+    };
+  };
+
   /** Burns of the project's own token, read from the chain index. Nothing is shown until the token exists. */
   app.get("/v1/token", (c) => {
     const token = ctx.cfg.token?.toLowerCase();
-    if (!token) return c.json({ live: false, burns: [], totalBurned: null });
+    if (!token) return c.json({ live: false, burns: [], totalBurned: null, buyback: buybackView(ctx) });
     const rows = ctx.db.prepare("SELECT amount, tx, time FROM burns WHERE token = ? ORDER BY block DESC, log_index DESC LIMIT 100").all(token) as { amount: string; tx: string; time: number }[];
     const total = (ctx.db.prepare("SELECT burned FROM holder_progress WHERE token = ?").get(token) as { burned: string } | undefined)?.burned ?? "0";
     if (!ctx.db.prepare("SELECT 1 FROM holder_progress WHERE token = ?").get(token)) ctx.db.prepare("INSERT OR IGNORE INTO holder_progress (token, from_block, last_block) SELECT ?, launch_block, launch_block - 1 FROM tokens WHERE address = ? AND launch_seen = 1").run(token, token);
-    return c.json({ live: true, burns: rows.map((r) => ({ amount: formatUnits(BigInt(r.amount), 18), tx: r.tx, time: iso(r.time) })), totalBurned: formatUnits(BigInt(total), 18) });
+    return c.json({ live: true, burns: rows.map((r) => ({ amount: formatUnits(BigInt(r.amount), 18), tx: r.tx, time: iso(r.time) })), totalBurned: formatUnits(BigInt(total), 18), buyback: buybackView(ctx) });
   });
 
   app.get("/v1/metrics", (c) => {

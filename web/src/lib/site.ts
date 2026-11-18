@@ -5,7 +5,6 @@ export const SITE = {
   url: "https://speculaagents.fun",
   github: "https://github.com/SpeculaAgents",
   x: "https://x.com/SpeculaAgents",
-  email: "hello@speculaagents.fun",
   risk: "Specula is software, not financial advice; use at your own risk.",
 };
 
