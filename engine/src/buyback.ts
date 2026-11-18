@@ -6,7 +6,7 @@
 //             on buybacks, gas included. Only that is ever spent, so the wallet's own ETH and its own $SPECULA are
 //             never touched, and a buffer of SPECULA_BUYBACK_BUFFER_ETH (0.005) always stays for gas.
 //   3. buy:   on the bonding curve straight from the wallet, or after graduation through SpeculaSwap in the pool;
-//             at most 1% of the curve's depth per run, the rest waits for the next run
+//             every fee that came in is spent each run (a guard at 25% of the curve's ETH)
 //   4. burn:  token.burn() of exactly the tokens this buy delivered (read from the receipt), and the supply must fall
 //
 // Off unless SPECULA_BUYBACK=on. The wallet's key is SPECULA_BUYBACK_KEY. Every run is recorded and shown on the token
@@ -48,6 +48,7 @@ export interface BuybackConfig {
   swap: Address | null;
   everyMs: number;
   bufferWei: bigint;
+  maxBps: bigint;
   minWei: bigint;
 }
 
@@ -60,6 +61,7 @@ export function buybackConfig(env: NodeJS.ProcessEnv): BuybackConfig {
     everyMs: Number(env.SPECULA_BUYBACK_EVERY_MIN ?? 30) * 60_000,
     bufferWei: parseEther(env.SPECULA_BUYBACK_BUFFER_ETH ?? "0.005"),
     minWei: parseEther(env.SPECULA_BUYBACK_MIN_ETH ?? "0.0002"),
+    maxBps: BigInt(env.SPECULA_BUYBACK_MAX_BPS ?? "2500"),
   };
 }
 
@@ -179,7 +181,9 @@ export async function buybackRun(ctx: Ctx, cfg: BuybackConfig, wc?: WalletClient
   if (viaCurve) {
     if (await pub.readContract({ address: info.curve, abi: CURVE, functionName: "readyToGraduate" })) return done("the curve is graduating, waiting for the pool");
     const [quoteReserve] = await pub.readContract({ address: info.curve, abi: CURVE, functionName: "getReserves" });
-    const cap = quoteReserve / 100n;
+    // a guard only against a run far bigger than the market: every fee that came in is spent each run, up to
+    // SPECULA_BUYBACK_MAX_BPS of the curve's ETH (default 25%), so nothing piles up in the wallet
+    const cap = (quoteReserve * cfg.maxBps) / 10_000n;
     if (spend > cap) spend = cap;
   } else if (info.phase !== 2 || !cfg.swap) {
     return done("no market to buy in right now");
