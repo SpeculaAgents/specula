@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHead } from "@/components/PageHead";
 import { BuybackClock } from "@/components/BuybackClock";
+import { CopyAddress } from "@/components/CopyAddress";
 import { getToken } from "@/lib/engine";
 import { short, tiny, utc } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Token", description: "$SPECULA: fees bought back and burned by the team wallet, every buyback and burn on the record." };
 
 const EXPLORER = "https://robinhoodchain.blockscout.com";
+const TOKEN = "0x043D7F5c802A73F48345686EE94a75920C078CE7";
+const BUY = `https://ponsfamily.com/launchpad/${TOKEN}`;
 
 export default async function Token() {
   const t = await getToken();
@@ -15,7 +18,8 @@ export default async function Token() {
   const bb = t?.buyback ?? null;
   const fomo = process.env.SPECULA_FOMO_URL || null;
   const wallet = bb?.wallet ?? null;
-  const burned = live ? (t?.totalBurned && Number(t.totalBurned) > 0 ? t.totalBurned : bb?.burned ?? "0") : null;
+  // what the team wallet bought back and burned (the token's supply fell by exactly this); not other transfers to dead addresses
+  const burned = live ? bb?.burned ?? "0" : null;
   const runs = bb?.recent ?? [];
 
   return (
@@ -23,6 +27,19 @@ export default async function Token() {
       <PageHead crumb="Token" title="$SPECULA">
         Fees from trading $SPECULA are bought back and burned by the team wallet, every {bb?.everyMin ?? 30} minutes. Every buy and every burn is listed here with its transaction.
       </PageHead>
+
+      <section className="section">
+        <div className="frame ca-frame">
+          <div className="ca-head">
+            <span className="ca-label">Contract address</span>
+            <div className="ca-actions">
+              <a className="btn" href={BUY} target="_blank" rel="noopener noreferrer">Buy on Pons</a>
+              <a className="btn ghost" href={`${EXPLORER}/token/${TOKEN}`} target="_blank" rel="noopener noreferrer">The token on the explorer</a>
+            </div>
+          </div>
+          <CopyAddress address={TOKEN} />
+        </div>
+      </section>
 
       <section className="section">
         <div className="frame bb-top">
