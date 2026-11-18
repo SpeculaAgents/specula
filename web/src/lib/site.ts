@@ -16,6 +16,7 @@ export const NAV = [
   { href: "/lab", label: "Lab" },
   { href: "/ask", label: "Ask" },
   { href: "/docs", label: "Docs" },
+  { href: "/token", label: "Token" },
 ];
 
 export const FOOT = [
