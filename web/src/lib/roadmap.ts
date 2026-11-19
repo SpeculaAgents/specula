@@ -50,3 +50,15 @@ export const PHASES: Phase[] = [
   { n: "21", title: "Public data index", text: "An open ranking of the data agents ask for most.", stage: (s) => (s.demand?.calls ? "live" : "built") },
   { n: "22", title: "Token", text: "The Specula token.", stage: () => "later" },
 ];
+
+/** What comes after the build plan: the truth protocol. Plans, not live features; each says "the plan is" until it ships. */
+export const AHEAD: { n: string; title: string; text: string }[] = [
+  { n: "01", title: "The world model", text: "The plan is one live picture of the chain fused with the world behind it: filings, earnings, macro numbers and news, each with proof of its source, and a signed price for every stock token around the clock, including nights and weekends when Wall Street is closed." },
+  { n: "02", title: "The agent census", text: "The plan is to identify every AI agent on the chain by how it behaves, not by what it claims, with its strategy fingerprinted and its record attached. The first map of the machine economy." },
+  { n: "03", title: "The swarm", text: "The plan is thousands of simulated agents, each modelled on real wallets, playing the next hour out before it happens, so any agent can test a move against the crowd's most likely reaction." },
+  { n: "04", title: "Self-learning forecasts", text: "The plan is forecasts graded against what really happened, in public, with models that retrain on their own mistakes every hour and every model version fingerprinted for good." },
+  { n: "05", title: "Truth certificates", text: "The plan is a certificate of exactly what an agent knew when it acted, carried by every decision in any app, proposed as an open standard so apps, lenders and users can ask for it." },
+  { n: "06", title: "The settlement layer", text: "The plan is for contracts, bets and deals between agents to settle against Specula's answer. Anyone who proves an answer wrong takes the stake behind it, and a reserve pays out on wrong verdicts." },
+  { n: "07", title: "Specula runs itself", text: "The plan is for the engine to become an agent of its own: it earns from every answer, buys the data it is missing, pays sellers and node operators, and upgrades its models, all on chain." },
+  { n: "08", title: "Owned by the network", text: "The plan is independent nodes in secure enclaves, answers that count only when a quorum signs them, a proof for every computation, holders who govern, and every fee in $SPECULA burned." },
+];

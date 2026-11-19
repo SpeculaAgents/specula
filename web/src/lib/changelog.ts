@@ -1,5 +1,10 @@
 export const CHANGELOG: { date: string; title: string; items: string[] }[] = [
   {
+    date: "2026-11-19",
+    title: "The roadmap: the truth protocol",
+    items: ["Eight phases ahead: the world model, the agent census, the swarm, self-learning forecasts, truth certificates, the settlement layer, Specula running itself, and a network owned by its nodes.", "The twenty-two phases already built stay on the roadmap, each read from the running engine."],
+  },
+  {
     date: "2026-11-17",
     title: "Marketplace, bounties, archive and the lab",
     items: ["Anyone can list a feed and is paid per call, straight to their wallet.", "Private feeds for chosen wallets.", "Bounties for data that does not exist yet, with an escrow contract.", "A point-in-time archive: any feed as it was, signature included, and replay.", "Backtests over recorded prices and paper runs on live ones.", "Teams with a shared daily budget, a price widget to embed, and an open ranking of the data agents ask for."],

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { PageHead } from "@/components/PageHead";
 import { getArchive, getBounties, getDemand, getIndexes, getLab, getMarket, getRoots, getSignals, getStatus } from "@/lib/engine";
-import { PHASES, STAGE_LABEL } from "@/lib/roadmap";
+import { AHEAD, PHASES, STAGE_LABEL } from "@/lib/roadmap";
 
-export const metadata: Metadata = { title: "Roadmap", description: "All 22 phases of Specula, with what is live today read from the running engine." };
+export const metadata: Metadata = { title: "Roadmap", description: "The truth protocol for the agent economy: eight phases ahead, and the twenty-two already built, read from the running engine." };
 
 export default async function Roadmap() {
   const [status, signals, roots, indexes, market, bounties, archive, lab, demand] = await Promise.all([getStatus(), getSignals(), getRoots(), getIndexes(), getMarket(), getBounties(), getArchive(), getLab(), getDemand()]);
@@ -12,11 +12,24 @@ export default async function Roadmap() {
   const count = (s: string) => rows.filter((r) => r.st === s).length;
   return (
     <>
-      <PageHead crumb="Roadmap" title="Twenty-two phases">
-        The whole plan, in order. A phase is marked live only when the running engine reports that it works; nothing here is switched on by hand.
+      <PageHead crumb="Roadmap" title="The truth protocol">
+        Every model thinks, every kit acts, every pool lends. Specula is becoming what they all check against: the record of what was true, what agents knew and what happens next.
       </PageHead>
       <section className="section">
         <div className="frame">
+          <h2 className="h2" style={{ marginTop: 0, marginBottom: 28 }}>Eight phases ahead</h2>
+          <ol className="road" style={{ marginBottom: 56 }}>
+            {AHEAD.map((r) => (
+              <li key={r.n} className="later">
+                <span className="rn">{r.n}</span>
+                <span className="rt">{r.title}</span>
+                <span className="rd">{r.text}</span>
+                <span className="rs"><span className="state idle"><i />Ahead</span></span>
+              </li>
+            ))}
+          </ol>
+          <h2 className="h2" style={{ marginBottom: 12 }}>Twenty-two phases built</h2>
+          <p className="small" style={{ marginTop: 0, marginBottom: 28 }}>A phase is marked live only when the running engine reports that it works; nothing here is switched on by hand.</p>
           <dl className="kv four" style={{ marginBottom: 40 }}>
             <div><dt>Live</dt><dd>{count("live")}</dd></div>
             <div><dt>Partly live</dt><dd>{count("part")}</dd></div>
