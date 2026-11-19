@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 const ENGINE = (process.env.SPECULA_ENGINE_URL ?? "http://127.0.0.1:4100").replace(/\/$/, "");
 
 /** What the public site may reach on the engine. Anything else, the metrics among it, is not forwarded. */
-const ALLOW = /^(site|catalog(\/[a-z0-9.]+)?|feeds\/[a-z0-9.]+|status|requests|quote\/[a-z0-9.]+|events|signals(\/(parse|mine|rule_[A-Za-z0-9_-]+))?|quality|roots|proof\/0x[0-9a-fA-F]{64}|indexes|oracle\/[a-z]+:[A-Za-z0-9.]+|account|budget|receipts(\/rcpt_[A-Za-z0-9_-]+)?|credits\/topup|token|briefing|market(\/(mine|feeds(\/[a-z0-9]+)?))?|bounties(\/bnty_[A-Za-z0-9_-]+(\/offers)?)?|archive|lab(\/paper(\/paper_[A-Za-z0-9_-]+)?)?|teams(\/(mine|team_[A-Za-z0-9_-]+\/(members(\/0x[0-9a-fA-F]{40})?|budget)))?|demand)$/;
+const ALLOW = /^(site|catalog(\/[a-z0-9.]+)?|feeds\/[a-z0-9.]+|status|requests|quote\/[a-z0-9.]+|events|signals(\/(parse|mine|rule_[A-Za-z0-9_-]+))?|quality|roots|proof\/0x[0-9a-fA-F]{64}|indexes|oracle\/[a-z]+:[A-Za-z0-9.]+|account|budget|receipts(\/rcpt_[A-Za-z0-9_-]+)?|credits\/topup|token|briefing|market(\/(mine|feeds(\/[a-z0-9]+)?))?|bounties(\/bnty_[A-Za-z0-9_-]+(\/offers)?)?|archive|lab(\/paper(\/paper_[A-Za-z0-9_-]+)?)?|teams(\/(mine|team_[A-Za-z0-9_-]+\/(members(\/0x[0-9a-fA-F]{40})?|budget)))?|demand|radar)$/;
 
 /** Until launch (SPECULA_OPEN=off) only the site itself reads the engine; agents and scripts get a clear answer. */
 const OPEN = process.env.SPECULA_OPEN !== "off";
