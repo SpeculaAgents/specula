@@ -11,6 +11,7 @@ import { loadConfig, type Config } from "./config.ts";
 import { makeCtx, type Ctx, type CtxOptions } from "./ctx.ts";
 import { kvGet, kvSet } from "./db.ts";
 import { registerIndexes, stepIndexes } from "./indexes.ts";
+import { buildRadar, registerRadar } from "./radar.ts";
 import { pruneArchive, registerArchive } from "./archive.ts";
 import { registerLab, watchPaper } from "./lab.ts";
 import { registerMarket } from "./market.ts";
@@ -64,7 +65,7 @@ export async function startEngine(overrides: Partial<Config> = {}, opts: CtxOpti
   watchSignals(ctx);
   watchPaper(ctx);
   if (!budgetHooks.includes(checkTeamBudget)) budgetHooks.push(checkTeamBudget);
-  const app = makeApp(ctx, [registerSignals, registerVerify, registerQuality, registerIndexes, registerMarket, registerArchive, registerLab, registerTeams]);
+  const app = makeApp(ctx, [registerSignals, registerVerify, registerQuality, registerIndexes, registerMarket, registerArchive, registerLab, registerTeams, registerRadar]);
   const server = await new Promise<Server>((res) => {
     const s = nodeServe({ fetch: app.fetch, port: cfg.port, hostname: process.env.SPECULA_HOST ?? "::" }, () => res(s as unknown as Server));
   });
@@ -130,6 +131,7 @@ export async function startEngine(overrides: Partial<Config> = {}, opts: CtxOpti
   if (bb.on) every("buyback", bb.everyMs, async () => { const note = await buybackRun(ctx, bb); console.log(`[buyback] ${note}`); }, 60_000);
   every("quality", 3_600_000, () => crossCheckPrices(ctx), 15_000);
   every("briefing", 1_800_000, () => buildBriefing(ctx), 240_000);
+  every("radar", 4 * 3_600_000, async () => console.log(`[radar] ${await buildRadar(ctx)}`), 90_000);
   every("prune", 6 * 3_600_000, async () => (prune(ctx), pruneArchive(ctx)), 60_000);
   /** Keep every feed's example answer warm, one feed at a time, so the catalog always has a real answer to show. */
   let warmAt = 0;

@@ -13,6 +13,7 @@ export const NAV = [
   { href: "/market", label: "Market" },
   { href: "/terminal", label: "Terminal" },
   { href: "/signals", label: "Signals" },
+  { href: "/radar", label: "Radar" },
   { href: "/lab", label: "Lab" },
   { href: "/ask", label: "Ask" },
   { href: "/docs", label: "Docs" },
@@ -20,7 +21,7 @@ export const NAV = [
 ];
 
 export const FOOT = [
-  { title: "Product", links: [{ href: "/feeds", label: "Feed catalog" }, { href: "/terminal", label: "Terminal" }, { href: "/signals", label: "Signals" }, { href: "/ask", label: "Ask the data" }, { href: "/indexes", label: "Indexes" }, { href: "/market", label: "Marketplace" }, { href: "/lab", label: "Strategy lab" }] },
+  { title: "Product", links: [{ href: "/feeds", label: "Feed catalog" }, { href: "/terminal", label: "Terminal" }, { href: "/signals", label: "Signals" }, { href: "/ask", label: "Ask the data" }, { href: "/indexes", label: "Indexes" }, { href: "/radar", label: "Insider radar" }, { href: "/market", label: "Marketplace" }, { href: "/lab", label: "Strategy lab" }] },
   { title: "Build", links: [{ href: "/docs", label: "Docs" }, { href: "/docs#sdk", label: "SDK" }, { href: "/docs#mcp", label: "MCP server" }, { href: "/verify", label: "Verify an answer" }, { href: "/demand", label: "Data index" }, { href: "/status", label: "Status" }] },
   { title: "Project", links: [{ href: "/roadmap", label: "Roadmap" }, { href: "/changelog", label: "Changelog" }, { href: "/token", label: "Token" }, { href: "/own-risk", label: "Own risk" }] },
 ];

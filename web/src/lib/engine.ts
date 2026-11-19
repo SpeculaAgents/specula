@@ -25,6 +25,10 @@ export const getQuality = cache(() => read<Quality>("/v1/quality"));
 export const getSignals = cache(() => read<Signals>("/v1/signals"));
 export const getRoots = cache(() => read<Roots>("/v1/roots"));
 export const getIndexes = cache(() => read<Indexes>("/v1/indexes"));
+export interface RadarTrade { ticker: string; company: string; owner: string; role: string; date: string | null; side: "buy" | "sell"; shares: string | null; price: string | null; valueUsd: string; url: string }
+export interface RadarCompany { ticker: string; company: string; filingsRead: number; buys: number; sells: number; boughtUsd: string; soldUsd: string; netUsd: string; biggest: RadarTrade | null; lastDate: string | null }
+export interface Radar { updatedAt: string | null; companies: RadarCompany[]; biggest: RadarTrade[]; totals: { soldUsd: string; boughtUsd: string; companies: number; withTrades: number }; note: string }
+export const getRadar = cache(() => read<Radar>("/v1/radar"));
 export interface Buyback { on: boolean; wallet: string | null; splitter: string | null; everyMin: number; lastAt: string | null; nextAt: string | null; runs: number; ethSpent: string; burned: string; recent: { time: string; eth: string; burned: string; buyTx: string; burnTx: string | null; via: string }[] }
 export const getToken = cache(() => read<{ live: boolean; burns: { amount: string; tx: string; time: string }[]; totalBurned: string | null; buyback?: Buyback }>("/v1/token"));
 export const getBriefing = cache(() => read<{ day: string | null; at: string | null; sections: { title: string; lines: { text: string; feed: string }[] }[] }>("/v1/briefing"));
